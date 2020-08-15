@@ -4,14 +4,12 @@ pipeline {
 		maven 'maven'
 	}
 	stages {
-		stage ('Compile Stage') <-- THIS IS A STAGE
-			{
+		stage ('Compile Stage') {
 			steps{
 				bat 'mvn clean compile'	
 			}	
 		}
-		stage ('Sonarqube deployment Stage') <-- THIS IS A STAGE
-			{
+		stage ('Sonarqube deployment Stage') {
 			steps{
 				bat 'mvn sonar:sonar'	
 			}	
