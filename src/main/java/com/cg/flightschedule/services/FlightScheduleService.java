@@ -40,12 +40,17 @@ public class FlightScheduleService implements IFlightScheduleService{
 	@Autowired
 	IAirportRepository airportReposidtory;
 	
+	@Autowired
+	IFlightService flightService;
+	
 	@Override
 	@Transactional
 	public void scheduleFlight(FlightSchedule flightSchedule) {
 		
 		log.debug("Inside scheduleFlight function");
 		
+		Optional<Flight> FlightOpt=flightService.viewFlight(flightSchedule.getFlight().getFlightNumber());
+		flightSchedule.setAvailableSeats(FlightOpt.get().getSeatNumber());
 		scheduleRepository.save(flightSchedule.getSchedule());
 		
 		flightScheduleRepository.save(flightSchedule);
@@ -129,16 +134,8 @@ public class FlightScheduleService implements IFlightScheduleService{
 	@Transactional
 	public String validateScheduledFlight(FlightSchedule flightSchedule){
 		
-		int id=flightSchedule.getScheduleFlightId();
 		Flight flight=flightSchedule.getFlight();
 		Schedule schedule=flightSchedule.getSchedule();
-		
-		
-		Optional<FlightSchedule> FlightScheduleOpt=flightScheduleRepository.findById(id);
-		
-		if(FlightScheduleOpt.isPresent()) {
-			return "Flight Schedule with this ID already exists!!";
-		}
 		
 		Optional<Flight> FlightOpt=flightRepository.findById(flight.getFlightNumber());
 		
@@ -168,7 +165,7 @@ public class FlightScheduleService implements IFlightScheduleService{
 		LocalDateTime departureTime=schedule.getDepartureTime();
 		int status2=departureTime.toLocalDate().compareTo(LocalDate.now());
 		if(status2<1) {
-			return "Departure time should be greater than present date";
+			return "Departure date should be greater than present date";
 		}
 		
 		

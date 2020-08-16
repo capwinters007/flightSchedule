@@ -1,6 +1,6 @@
 package com.cg.flightschedule.exception;
 
-public class IdException extends Exception{
+public class FlightScheduleNotFoundException extends Exception{
 
 	/**
 	 * 

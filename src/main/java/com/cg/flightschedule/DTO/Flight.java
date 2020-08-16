@@ -25,6 +25,7 @@ public class Flight {
 	@Column(name="seatCapacity")
 	private int seatNumber;
 	
+	
 	public Flight() {
 		super();
 	}
