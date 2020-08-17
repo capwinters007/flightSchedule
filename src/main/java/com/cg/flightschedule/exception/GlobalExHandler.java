@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class GlobalException {
+public class GlobalExHandler {
 	
-	 static final Logger log=LoggerFactory.getLogger(GlobalException.class);
+	 static final Logger log=LoggerFactory.getLogger(GlobalExHandler.class);
 
 	
 	@ExceptionHandler({FlightScheduleNotFoundException.class})
