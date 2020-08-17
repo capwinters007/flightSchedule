@@ -17,9 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cg.flightschedule.DTO.Airport;
-import com.cg.flightschedule.DTO.FlightSchedule;
-
+import com.cg.flightschedule.entity.Airport;
+import com.cg.flightschedule.entity.FlightSchedule;
 import com.cg.flightschedule.exception.FlightScheduleNotFoundException;
 import com.cg.flightschedule.services.IAirportService;
 import com.cg.flightschedule.services.IFlightScheduleService;
@@ -42,7 +41,6 @@ public class FlightScheduleController {
 	public String add(@RequestBody FlightSchedule flightSchedule)
 	{
 		log.debug("Inside add method in controller class");
-		System.out.println("in add");
 		
 		String validate=flightScheduleServive.validateScheduledFlight(flightSchedule);
 		
@@ -54,24 +52,32 @@ public class FlightScheduleController {
 	}
 	
 	@GetMapping("/viewByAirport")
-	public List<FlightSchedule> getFlightOnDate(@RequestParam("source")String source,@RequestParam("destination") String destination,@RequestParam("date")String Date) throws FlightScheduleNotFoundException{
+	public List<FlightSchedule> getFlightOnDate(@RequestParam("source")String source,@RequestParam("destination") String destination,@RequestParam("date")String date) throws FlightScheduleNotFoundException{
 		
+		Airport airport1=null;
+		Airport airport2=null;
 		
-		Airport airport1=airportService.viewAirport(source).get();
-		Airport airport2=airportService.viewAirport(destination).get();
-		LocalDate date=LocalDate.parse(Date);
+		Optional<Airport> optAirport1=airportService.viewAirport(source);
+		Optional<Airport> optAirport2=airportService.viewAirport(destination);
 		
-		if(date.compareTo(LocalDate.now())<1) {
+		if(optAirport1.isPresent()) 
+			airport1=optAirport1.get();
+		if(optAirport2.isPresent())
+			airport2=optAirport2.get();
+		
+		LocalDate date2=LocalDate.parse(date);
+		
+		if(date2.compareTo(LocalDate.now())<1) {
 			throw new FlightScheduleNotFoundException();
 		}
 		
-		List<FlightSchedule> FlightScheduleList=flightScheduleServive.viewScheduledFlights(airport1,airport2,date);
+		List<FlightSchedule> flightScheduleList=flightScheduleServive.viewScheduledFlights(airport1,airport2,date2);
 		
-		if(FlightScheduleList.isEmpty()) {
+		if(flightScheduleList.isEmpty()) {
 			throw new FlightScheduleNotFoundException();
 		}
 		
-		return FlightScheduleList;
+		return flightScheduleList;
 	}
 	@GetMapping("/deleteFlightSchedule")
 	public String delete(@RequestParam("id") int id) throws FlightScheduleNotFoundException {
@@ -110,14 +116,11 @@ public class FlightScheduleController {
 			throw new FlightScheduleNotFoundException();
 		}
 		
-		FlightSchedule flightSchedule=flightScheduleOpt.get();
-		
-		return flightSchedule;
+		return flightScheduleOpt.get();
 	}
 	
 	@GetMapping("/viewAll")
 	public List<FlightSchedule> getAllFlightSchedule(){
-		System.out.println("in view all");
 		return flightScheduleServive.viewScheduledFlights();
 	}
 	

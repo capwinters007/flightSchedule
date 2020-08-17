@@ -14,10 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cg.flightschedule.DTO.Airport;
-import com.cg.flightschedule.DTO.Flight;
-import com.cg.flightschedule.DTO.FlightSchedule;
-import com.cg.flightschedule.DTO.Schedule;
+import com.cg.flightschedule.entity.Airport;
+import com.cg.flightschedule.entity.Flight;
+import com.cg.flightschedule.entity.FlightSchedule;
+import com.cg.flightschedule.entity.Schedule;
 import com.cg.flightschedule.repository.IAirportRepository;
 import com.cg.flightschedule.repository.IFlightRepository;
 import com.cg.flightschedule.repository.IFlightScheduleRepository;
@@ -62,9 +62,7 @@ public class FlightScheduleService implements IFlightScheduleService{
 		
 		log.debug("Inside viewScheduledFlights by id function in FlightScheduleController");
 		
-		Optional<FlightSchedule> flightScheduleOpt=flightScheduleRepository.findById(id);
-		
-		return flightScheduleOpt;
+		return flightScheduleRepository.findById(id);
 	}
 	
 	@Override
@@ -98,11 +96,12 @@ public class FlightScheduleService implements IFlightScheduleService{
 		
 		log.debug("Inside deleteScheduledFlight function in FlightScheduleService class");
 		
-		Optional<FlightSchedule> flightSchedule=flightScheduleRepository.findById(id);
+		Optional<FlightSchedule> optFlightSchedule=flightScheduleRepository.findById(id);
 		
-		scheduleRepository.deleteById(flightSchedule.get().getSchedule().getScheduleId());
-		
+		if(optFlightSchedule.isPresent()) {
+		scheduleRepository.deleteById(optFlightSchedule.get().getSchedule().getScheduleId());
 		flightScheduleRepository.deleteById(id);
+		}
 	}
 	
 	@Override
@@ -123,9 +122,7 @@ public class FlightScheduleService implements IFlightScheduleService{
 		
 		log.debug("Inside viewScheduledFlights function in FlightScheduleService class");
 		
-		List<FlightSchedule> flightScheduleList=flightScheduleRepository.findAll();
-		
-		return flightScheduleList;
+		return flightScheduleRepository.findAll();
 				
 		
 	}

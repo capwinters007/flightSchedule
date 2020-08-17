@@ -4,9 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import com.cg.flightschedule.DTO.Airport;
-
-import com.cg.flightschedule.DTO.FlightSchedule;
+import com.cg.flightschedule.entity.Airport;
+import com.cg.flightschedule.entity.FlightSchedule;
 
 
 public interface IFlightScheduleService {

@@ -1,4 +1,4 @@
-package com.cg.flightschedule.DTO;
+package com.cg.flightschedule.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.cg.flightschedule.DTO.Airport;
-import com.cg.flightschedule.DTO.FlightSchedule;
+import com.cg.flightschedule.entity.Airport;
+import com.cg.flightschedule.entity.FlightSchedule;
 
 @Repository("flightScheduleRepository")
 public interface IFlightScheduleRepository extends JpaRepository<FlightSchedule, Integer>{
