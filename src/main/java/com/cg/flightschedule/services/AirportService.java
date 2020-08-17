@@ -17,11 +17,9 @@ public class  AirportService  implements IAirportService{
 		
 		@Override
 		@Transactional
-		public Optional<Airport> viewAirport(String Code) {
+		public Optional<Airport> viewAirport(String code) {
 	
-			Optional<Airport> airportObj=airportRepository.findById(Code);
-			
-			return airportObj;
+			return airportRepository.findById(code);
 		}
 
 }

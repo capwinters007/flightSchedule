@@ -49,11 +49,13 @@ public class FlightScheduleService implements IFlightScheduleService{
 		
 		log.debug("Inside scheduleFlight function");
 		
-		Optional<Flight> FlightOpt=flightService.viewFlight(flightSchedule.getFlight().getFlightNumber());
-		flightSchedule.setAvailableSeats(FlightOpt.get().getSeatNumber());
+		Optional<Flight> flightOpt=flightService.viewFlight(flightSchedule.getFlight().getFlightNumber());
+		if(flightOpt.isPresent()) {
+		flightSchedule.setAvailableSeats(flightOpt.get().getSeatNumber());
 		scheduleRepository.save(flightSchedule.getSchedule());
 		
 		flightScheduleRepository.save(flightSchedule);
+		}
 	}
 	
 	@Override
@@ -71,21 +73,18 @@ public class FlightScheduleService implements IFlightScheduleService{
 		
 		log.debug("Inside viewScheduledFlights by parameters function in FlightSchedule Service");
 		
-		List<FlightSchedule> FlightScheduleList=flightScheduleRepository.getFlightScheduleByAirport(arrival, destination);
-		
-		System.out.println(FlightScheduleList);
-		List<FlightSchedule> FlightsOnScheduleList=new ArrayList<>();
+		List<FlightSchedule> flightScheduleList=flightScheduleRepository.getFlightScheduleByAirport(arrival, destination);
+		List<FlightSchedule> flightsOnScheduleList=new ArrayList<>();
 	
 		
-		for (FlightSchedule flightSchedule : FlightScheduleList) {
+		for (FlightSchedule flightSchedule : flightScheduleList) {
 			Schedule schedule=flightSchedule.getSchedule();
-			System.out.println(schedule.getDepartureTime().toLocalDate());
 			if(schedule.getDepartureTime().toLocalDate().equals(date)) {
-				FlightsOnScheduleList.add(flightSchedule);
+				flightsOnScheduleList.add(flightSchedule);
 			}
 		}
 		
-		return FlightsOnScheduleList;
+		return flightsOnScheduleList;
 		
 				
 	}
@@ -134,22 +133,22 @@ public class FlightScheduleService implements IFlightScheduleService{
 		Flight flight=flightSchedule.getFlight();
 		Schedule schedule=flightSchedule.getSchedule();
 		
-		Optional<Flight> FlightOpt=flightRepository.findById(flight.getFlightNumber());
+		Optional<Flight> flightOpt=flightRepository.findById(flight.getFlightNumber());
 		
-		if(!FlightOpt.isPresent()) {
+		if(!flightOpt.isPresent()) {
 			return "No Flight with flight Number "+flight.getFlightNumber()+" exists!!";
 		}
 		
 		
 		Airport source=schedule.getSourceAirport();
-		Optional<Airport> AirportSourceOpt=airportReposidtory.findById(source.getAirportCode());
-		if(!AirportSourceOpt.isPresent()) {
+		Optional<Airport> airportSourceOpt=airportReposidtory.findById(source.getAirportCode());
+		if(!airportSourceOpt.isPresent()) {
 			return "No source airport exists of code "+source.getAirportCode();
 		}
 		
 		Airport destination=schedule.getDestinationAirport();
-		Optional<Airport> AirportDestinationOpt=airportReposidtory.findById(destination.getAirportCode());
-		if(!AirportDestinationOpt.isPresent()) {
+		Optional<Airport> airportDestinationOpt=airportReposidtory.findById(destination.getAirportCode());
+		if(!airportDestinationOpt.isPresent()) {
 			return "No destination airport exists of code "+destination.getAirportCode();
 		}
 		

@@ -15,7 +15,7 @@ public class GlobalException {
 	
 	@ExceptionHandler({FlightScheduleNotFoundException.class})
 	public ResponseEntity<String> handleException(Exception ex) {
-		return new ResponseEntity<String>("Flight Schedule not found",HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>("Flight Schedule not found",HttpStatus.NOT_FOUND);
 	}
 
 }
